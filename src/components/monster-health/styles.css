@@ -1,0 +1,40 @@
+.icon{
+    height:50px;
+    width:50px;
+    display: inline-block;
+    border-radius: 5px;
+    background-color:#eee;
+    color: black;
+    line-height: 50px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.main{
+    margin-bottom: 5px;
+}
+
+.leftButton{
+    border-right:0;
+}
+
+.centerInput{
+    border-radius:0;
+    border-right: 0;
+    border-left:0;
+    width: 50px;
+    text-align: center;
+}
+
+.rightButton{
+    border-left:0;
+}
+
+.statusImage{
+    height:30px;
+    width:30px;
+}
+
+.desaturate{
+    filter: grayscale(100%) opacity(50%);
+}
