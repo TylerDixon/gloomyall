@@ -36,14 +36,14 @@ class MonsterHealth extends Component {
     return (
       <Row type="flex" align="middle" gutter={16} className={styles.main}>
         <Col>
-          <a href="#" onClick={() => this.props.toggleElite()}>
+          <a href="#" onClick={() => this.props.editMonster()}>
             <Badge status={isElite ? "warning" : "default"}>
               <div className={styles.icon}>{this.props.number}</div>
             </Badge>
           </a>
         </Col>
         <Col>
-          <ButtonGroup compact="true">
+          <ButtonGroup compact="true" className={styles.buttonGroup}>
             <Button
               className={styles.leftButton}
               onClick={() => this.props.manipDamage(-1)}

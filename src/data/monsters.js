@@ -2967,7 +2967,7 @@ export var stats = {
       ]
     },
     "Living Spirit": {
-      image: ".jpg",
+      image: "Ghost.jpg",
       level: [
         {
           level: 0,

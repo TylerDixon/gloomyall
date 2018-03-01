@@ -1,0 +1,29 @@
+.numbers{
+    margin-bottom: 20px;
+    display: block;
+}
+.number{
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    line-height: 30px;
+    display: inline-block;
+    text-align: center;
+    margin: 5px;
+    font-weight: bold;
+    border: 3px solid #aaa;
+    color: #aaa;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+.unavailable{
+    border: 2px solid #ddd;
+    color: #ddd;
+}
+
+.selected{
+    font-weight: bold;
+    border: 3px solid #000;
+    color: #000;
+}

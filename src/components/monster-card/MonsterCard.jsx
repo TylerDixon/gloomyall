@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal, Card, Row, Col, Button, Icon } from "antd";
 import styles from "./styles.css";
 import MonsterHealth from "../monster-health/MonsterHealth.jsx";
+import MonsterNumber from "../monster-number/MonsterNumber.jsx";
 import MoveImage from "../../images/move.svg";
 import AttackImage from "../../images/attack.svg";
 import HealthImage from "../../images/heal.svg";
@@ -11,7 +12,8 @@ class MonsterCard extends Component {
   constructor() {
     super();
     this.state = {
-      monsters: [{ damage: 0, statuses: [], number: 1 }]
+      monsters: [{ damage: 0, statuses: [], number: 1 }],
+      updatingMonster: undefined
     };
   }
   addMonster() {
@@ -30,6 +32,49 @@ class MonsterCard extends Component {
         number: numberToUse
       })
     });
+  }
+  openMonsterEditNumber(index) {
+    this.setState({ updatingMonster: index });
+  }
+  openMonsterModalNumber(isNewMonster) {
+    this.setState({ showMonsterNumberModal: true });
+  }
+  closeMonsterNumberModal() {
+    this.setState({
+      updatingMonster: undefined,
+      showMonsterNumberModal: false
+    });
+  }
+  newMonster(number, isElite) {
+    var monsters = this.state.monsters;
+    var placementIndex;
+    const setIndex = monsters.some((monster, index) => {
+      if (monster.number > number) {
+        placementIndex = index;
+        return true;
+      }
+    });
+    if (!setIndex) {
+      placementIndex = monsters.length;
+    }
+    monsters.splice(placementIndex, 0, {
+      number,
+      isElite,
+      statuses: [],
+      damage: 0
+    });
+    console.log(monsters);
+    this.setState({
+      monsters,
+      showMonsterNumberModal: false
+    });
+  }
+  editMonster(number, isElite, index) {
+    var monsters = this.state.monsters;
+    monsters[index].number = number;
+    monsters[index].isElite = isElite;
+    monsters.sort((a, b) => a.number > b.number);
+    this.setState({ monsters, updatingMonster: undefined });
   }
   destroyMonster(index) {
     var monsters = this.state.monsters;
@@ -67,7 +112,11 @@ class MonsterCard extends Component {
       .concat(monsters.slice(index + 1));
 
     var newState = { monsters };
-    if (this.props.stats.health === damagedMonster.damage) {
+    var health = this.state.monsters[index].isElite
+      ? this.props.eliteStats.health
+      : this.props.stats.health;
+
+    if (health === damagedMonster.damage) {
       Modal.confirm({
         title: `Kill #${damagedMonster.number}?`,
         cancelText: "No",
@@ -124,7 +173,7 @@ class MonsterCard extends Component {
                     stats={monster.isElite ? eliteStats : stats}
                     number={monster.number}
                     isElite={monster.isElite}
-                    toggleElite={() => this.toggleElite(index)}
+                    editMonster={() => this.openMonsterEditNumber(index)}
                     damage={monster.damage}
                     statuses={monster.statuses}
                     toggleStatus={status => this.toggleStatus(status, index)}
@@ -134,7 +183,9 @@ class MonsterCard extends Component {
               })}
             </Row>
             <Row>
-              <Button onClick={() => this.addMonster()}>Add Monster</Button>
+              <Button onClick={() => this.openMonsterModalNumber(true)}>
+                Add Monster
+              </Button>
             </Row>
           </Col>
         </Row>
@@ -146,6 +197,37 @@ class MonsterCard extends Component {
           onOk={() => this.destroyMonster(this.state.monsterToKill)}
           onCancel={() => this.manipDamage(-1, this.state.monsterToKill)}
         />
+        {this.state.showMonsterNumberModal ? (
+          <MonsterNumber
+            unavailableNumbers={this.state.monsters.map(
+              monster => monster.number
+            )}
+            saveMonster={(number, isElite) => this.newMonster(number, isElite)}
+          />
+        ) : (
+          ""
+        )}
+        {this.state.updatingMonster !== undefined ? (
+          <MonsterNumber
+            selectedNumber={
+              this.state.monsters[this.state.updatingMonster].number
+            }
+            unavailableNumbers={this.state.monsters
+              .map(monster => monster.number)
+              .filter(
+                number =>
+                  number !==
+                  this.state.monsters[this.state.updatingMonster].number
+              )}
+            saveMonster={(number, isElite) =>
+              this.editMonster(number, isElite, this.state.updatingMonster)
+            }
+            isElite={this.state.monsters[this.state.updatingMonster].isElite}
+            close={() => this.closeMonsterNumberModal()}
+          />
+        ) : (
+          ""
+        )}
       </Card>
     );
   }
