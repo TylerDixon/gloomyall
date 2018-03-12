@@ -2,7 +2,11 @@ language: node_js
 node_js:
   - "7"
 script: npm run build
+env:
+  - GH_PAGES=true
 deploy:
+  edge:
+    branch: v1.8.47
   local-dir: build
   provider: pages
   skip-cleanup: true
