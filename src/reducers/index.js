@@ -80,9 +80,9 @@ const monsterInstances = (state = {}, action) => {
       };
 
     case "ADD_STATUS":
-      var newStatuses = monsterToEdit.statuses.slice(0);
-      newStatuses.push(action.status);
-      monsterToEdit.statuses = newStatuses;
+      var replacementStauses = monsterToEdit.statuses.slice(0);
+      replacementStauses.push(action.status);
+      monsterToEdit.statuses = replacementStauses;
       return {
         ...state,
         [action.monsterID]: replaceMonsterInPlace(monsterToEdit)

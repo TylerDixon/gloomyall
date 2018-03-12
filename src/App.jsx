@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { hot } from "react-hot-loader";
-import { Button, Row, Col, InputNumber, Modal, Icon } from "antd";
+import { Button, Row, Col, InputNumber, Modal } from "antd";
 import { stats } from "./data/monsters.js";
 
 import styles from "./App.css";
