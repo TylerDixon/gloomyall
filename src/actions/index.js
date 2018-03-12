@@ -14,10 +14,11 @@ export const addInstance = (monsterID, number, isElite) => {
   };
 };
 
-export const removeInstance = (monsterID, number, isElite) => {
+export const removeInstance = (monsterID, index) => {
   return {
     type: "REMOVE_INSTANCE",
-    monsterID
+    monsterID,
+    index
   };
 };
 
