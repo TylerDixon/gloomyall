@@ -47,3 +47,7 @@
     filter: grayscale(100%) opacity(50%);
 }
 
+.unstyled {
+    border: 0;
+    background: none;
+}

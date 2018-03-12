@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Badge, Button, Input, Row, Col } from "antd";
+import { Badge, Button, Input, Row, Col } from "antd";
 import styles from "./styles.css";
 import ImobilizeImage from "../../images/immobilize.svg";
 import InvisibilityImage from "../../images/invisibility.svg";
@@ -21,26 +21,24 @@ const imageStatusMap = {
 };
 
 class MonsterHealth extends Component {
-  constructor() {
-    super();
-  }
-
   desaturate(status) {
     if (this.props.statuses.indexOf(status) === -1) return styles.desaturate;
     return "";
   }
 
   render() {
-    const { name, statuses, isElite } = this.props;
-    const confirmKillVisible = this.props.damage === this.props.stats.health;
+    const { isElite } = this.props;
     return (
       <Row type="flex" align="middle" gutter={16} className={styles.main}>
         <Col>
-          <a href="#" onClick={() => this.props.editMonster()}>
+          <button
+            className={styles.unstyled}
+            onClick={() => this.props.editMonster()}
+          >
             <Badge status={isElite ? "warning" : "default"}>
               <div className={styles.icon}>{this.props.number}</div>
             </Badge>
-          </a>
+          </button>
         </Col>
         <Col>
           <ButtonGroup compact="true" className={styles.buttonGroup}>
@@ -66,6 +64,7 @@ class MonsterHealth extends Component {
           return (
             <Col>
               <img
+                alt={"Icon for status " + status}
                 className={styles.statusImage + " " + this.desaturate(status)}
                 onClick={() => this.props.toggleStatus(status)}
                 src={imageStatusMap[status]}

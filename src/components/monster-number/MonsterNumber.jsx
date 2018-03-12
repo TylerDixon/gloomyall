@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Card, Row, Col, Button, Switch } from "antd";
+import { Modal, Switch } from "antd";
 import styles from "./styles.css";
 
 class MonsterNumber extends Component {
@@ -24,7 +24,6 @@ class MonsterNumber extends Component {
     this.setState({ isElite });
   }
   render() {
-    var number = 1;
     return (
       <Modal
         title={"Monster Info"}

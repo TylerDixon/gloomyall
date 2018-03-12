@@ -24,3 +24,18 @@
 .AppContainer{
     padding: 5px;
 }
+
+.redo {
+    transform: scale(-1, 1);
+    right: 5px;
+}
+
+.undo{
+    left:5px;
+}
+
+.undo, .redo{
+    position:absolute;
+    top:5px;
+}
+

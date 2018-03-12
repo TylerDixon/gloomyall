@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Button, Row, Col, InputNumber, Modal } from "antd";
+import { hot } from "react-hot-loader";
+import { Button, Row, Col, InputNumber, Modal, Icon } from "antd";
+import { stats } from "./data/monsters.js";
 
 import styles from "./App.css";
-import helpers from "./helpers.css";
+import "./helpers.css";
 import MonsterModal from "./components/monster-modal/MonsterModal.jsx";
 import MonsterCard from "./components/monster-card/MonsterCard.jsx";
 
@@ -11,7 +13,6 @@ class App extends Component {
     super();
     this.state = {
       modalVisible: false,
-      monsters: [],
       level: 0
     };
     this.openModal = this.openModal.bind(this);
@@ -26,19 +27,14 @@ class App extends Component {
     this.setState({ modalVisible: false });
   }
   selectMonsters(monsters) {
-    this.setState({ monsters: this.state.monsters.concat(monsters) });
+    this.props.addMonsters(monsters);
   }
-  removeMonster(index) {
-    const monsters = this.state.monsters;
+  removeMonster(monster) {
     Modal.confirm({
-      title: `Are you sure you want to remove ${
-        this.state.monsters[index].name
-      }?`,
+      title: `Are you sure you want to remove ${monster}?`,
       okType: "danger",
       onOk: () => {
-        this.setState({
-          monsters: monsters.slice(0, index).concat(monsters.slice(index + 1))
-        });
+        this.props.removeMonster(monster);
       }
     });
   }
@@ -51,6 +47,20 @@ class App extends Component {
   render() {
     return (
       <div className={styles.AppContainer}>
+        <Button
+          disabled={!this.props.hasHistory}
+          className={styles.undo}
+          shape="circle"
+          icon="rollback"
+          onClick={this.props.undo}
+        />
+        <Button
+          disabled={!this.props.hasFuture}
+          className={styles.redo}
+          shape="circle"
+          icon="rollback"
+          onClick={this.props.redo}
+        />
         <Row justify="center" type="flex" gutter={5} className={styles.topRows}>
           <Col>
             Scenario Level:{" "}
@@ -67,15 +77,23 @@ class App extends Component {
             <Button onClick={this.openModal}>Add Monster</Button>
           </Col>
         </Row>
-        {this.state.monsters.map((monster, index) => {
+        {this.props.monsters.map((monster, index) => {
+          const monsterInfo = stats.monsters[monster];
           return (
             <Row>
               <MonsterCard
-                name={monster.name}
-                stats={monster.level[this.state.level].normal}
-                eliteStats={monster.level[this.state.level].elite}
-                image={monster.image}
-                removeMonster={() => this.removeMonster(index)}
+                name={monster}
+                stats={monsterInfo.level[this.state.level].normal}
+                eliteStats={monsterInfo.level[this.state.level].elite}
+                image={monsterInfo.image}
+                instances={this.props.monsterInstances[monster]}
+                addInstance={this.props.addInstance}
+                removeInstance={this.props.removeInstance}
+                editInstance={this.props.editInstance}
+                damageInstance={this.props.damageInstance}
+                addStatus={this.props.addStatus}
+                removeStatus={this.props.removeStatus}
+                removeMonster={() => this.removeMonster(monsterInfo)}
               />
             </Row>
           );
@@ -98,4 +116,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default hot(module)(App);

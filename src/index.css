@@ -3,3 +3,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.mar-top-5{
+    margin-top: 5px;
+}
+.mar-top-15{
+    margin-top: 15px;
+}

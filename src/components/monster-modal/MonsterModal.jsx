@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Modal, Select, Row, Button } from "antd";
+import { Modal, Select, Row, Button, Col } from "antd";
 
-import { stats, getMonsterAtLevel } from "../../data/monsters";
+import { stats } from "../../data/monsters";
 const Option = Select.Option;
 
 class MonsterModal extends Component {
@@ -22,6 +22,14 @@ class MonsterModal extends Component {
     });
   }
 
+  removeMonster(index) {
+    var selectedMonsters = this.state.selectedMonsters;
+    this.setState({
+      selectedMonsters: selectedMonsters
+        .slice(0, index)
+        .concat(selectedMonsters.slice(index + 1))
+    });
+  }
   addMonsterSelection() {
     this.setState({
       selectedMonsters: this.state.selectedMonsters.concat("")
@@ -29,11 +37,7 @@ class MonsterModal extends Component {
   }
 
   returnMonsters() {
-    return this.state.selectedMonsters.map(monsterName => {
-      var monster = stats.monsters[monsterName];
-      monster.name = monsterName;
-      return monster;
-    });
+    return this.state.selectedMonsters.filter(monster => monster !== "");
   }
 
   render() {
@@ -46,20 +50,28 @@ class MonsterModal extends Component {
       >
         {this.state.selectedMonsters.map((monster, index) => {
           return (
-            <Row>
-              <Select
-                defaultValue={monster}
-                onChange={selected => this.selectMonster(selected, index)}
-                style={{ width: 300 }}
-              >
-                {Object.keys(stats.monsters).map(key => {
-                  return <Option value={key}>{key}</Option>;
-                })}
-              </Select>
+            <Row className="mar-top-5" type="flex" justify="start" gutter={10}>
+              <Col>
+                <Select
+                  value={monster}
+                  onChange={selected => this.selectMonster(selected, index)}
+                  style={{ width: 300 }}
+                >
+                  {Object.keys(stats.monsters).map(key => {
+                    return <Option value={key}>{key}</Option>;
+                  })}
+                </Select>
+              </Col>
+              <Col>
+                <Button
+                  icon="close"
+                  onClick={() => this.removeMonster(index)}
+                />
+              </Col>
             </Row>
           );
         })}
-        <Row>
+        <Row className="mar-top-15">
           <Button onClick={() => this.addMonsterSelection()}>+</Button>
         </Row>
       </Modal>
