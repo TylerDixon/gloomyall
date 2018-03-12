@@ -11,21 +11,25 @@ import { persistState } from "redux-devtools";
 
 import DevTools from "./containers/DevTools.jsx";
 
+const isProd = process.env.NODE_ENV === "production";
 let storeEnhancer = compose(DevTools.instrument(), persistState());
-
-let store = createStore(reducers, {}, storeEnhancer);
-if (module.hot) {
-  module.hot.accept("./reducers", () =>
-    store.replaceReducer(
-      require("./reducers") /*.default if you use Babel 6+ */
-    )
-  );
+var store;
+if (isProd) {
+  store = createStore(reducers);
+} else {
+  store = createStore(reducers, {}, storeEnhancer);
+  if (module.hot) {
+    module.hot.accept("./reducers", () =>
+      store.replaceReducer(require("./reducers"))
+    );
+  }
 }
+
 ReactDOM.render(
   <Provider store={store}>
     <div>
       <App />
-      <DevTools />
+      {isProd ? "" : <DevTools />}
     </div>
   </Provider>,
   document.getElementById("root")
