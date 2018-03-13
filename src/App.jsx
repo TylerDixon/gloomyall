@@ -86,6 +86,7 @@ class App extends Component {
                 stats={monsterInfo.level[this.state.level].normal}
                 eliteStats={monsterInfo.level[this.state.level].elite}
                 image={monsterInfo.image}
+                removeMonster={() => this.removeMonster(monster)}
                 instances={this.props.monsterInstances[monster]}
                 addInstance={this.props.addInstance}
                 removeInstance={this.props.removeInstance}
@@ -93,7 +94,6 @@ class App extends Component {
                 damageInstance={this.props.damageInstance}
                 addStatus={this.props.addStatus}
                 removeStatus={this.props.removeStatus}
-                removeMonster={() => this.removeMonster(monsterInfo)}
               />
             </Row>
           );

@@ -5,6 +5,13 @@ export const addMonsters = monsterIDs => {
   };
 };
 
+export const removeMonster = monsterID => {
+  return {
+    type: "REMOVE_MONSTER",
+    monsterID
+  };
+};
+
 export const addInstance = (monsterID, number, isElite) => {
   return {
     type: "ADD_INSTANCE",

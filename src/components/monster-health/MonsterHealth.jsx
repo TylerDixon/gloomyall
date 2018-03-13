@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Badge, Button, Input, Row, Col } from "antd";
+import { Badge, Button, Input, Row, Col, Modal } from "antd";
 import styles from "./styles.css";
 import ImobilizeImage from "../../images/immobilize.svg";
 import InvisibilityImage from "../../images/invisibility.svg";
@@ -26,8 +26,74 @@ class MonsterHealth extends Component {
     return "";
   }
 
+  manipDamage(damage) {
+    const statuses = this.props.statuses;
+    const isPoisoned = statuses.indexOf("poison") > -1;
+    const isWounded = statuses.indexOf("wound") > -1;
+    if (damage < 0) {
+      if (isPoisoned && isWounded) {
+        return Modal.confirm({
+          title: `You are about to heal the monster, would you rather remove poison and wound instead?`,
+          okType: "danger",
+          cancelText: "No",
+          okText: "Yes",
+          onOk: () => {
+            this.props.toggleStatus("poison");
+            this.props.toggleStatus("wound");
+          },
+          onCancel: () =>
+            this.props.damage === 0 && damage < 0
+              ? this.showUnableToHealModal()
+              : this.props.manipDamage(damage)
+        });
+      }
+      if (isPoisoned) {
+        return Modal.confirm({
+          title: `You are about to heal the monster, would you rather remove poison?`,
+          okType: "danger",
+          cancelText: "No",
+          okText: "Yes",
+          onOk: () => this.props.toggleStatus("poison"),
+          onCancel: () =>
+            this.props.damage === 0 && damage < 0
+              ? this.showUnableToHealModal()
+              : this.props.manipDamage(damage)
+        });
+      } else if (isWounded) {
+        return Modal.confirm({
+          title: `You are about to heal the monster, would you like to remove the wound as well?`,
+          okType: "danger",
+          cancelText: "No",
+          okText: "Yes",
+          onOk: () => {
+            this.props.toggleStatus("wound");
+            this.props.manipDamage(damage);
+          },
+          onCancel: () =>
+            this.props.damage === 0 && damage < 0
+              ? this.showUnableToHealModal()
+              : this.props.manipDamage(damage)
+        });
+      }
+    }
+    if (this.props.damage === 0 && damage < 0) {
+      this.showUnableToHealModal();
+      return;
+    }
+    this.props.manipDamage(damage);
+  }
+
+  confirmModal(status, damage) {}
+
+  showUnableToHealModal() {
+    Modal.error({
+      title: "Can't heal monster",
+      content: "This monster is already at full health"
+    });
+  }
+
   render() {
-    const { isElite } = this.props;
+    const { isElite, statuses } = this.props;
     return (
       <Row type="flex" align="middle" gutter={16} className={styles.main}>
         <Col>
@@ -42,19 +108,32 @@ class MonsterHealth extends Component {
         </Col>
         <Col>
           <ButtonGroup compact="true" className={styles.buttonGroup}>
-            <Button
-              className={styles.leftButton}
-              onClick={() => this.props.manipDamage(-1)}
-            >
-              +
-            </Button>
+            {this.props.damage === 0 &&
+            statuses.indexOf("poison") === -1 &&
+            statuses.indexOf("wound") === -1 ? (
+              /* Instead of actually disabling, style it disabled so we can show the error alert. */
+              <Button
+                className={styles.disabled + " " + styles.leftButton}
+                onClick={() => this.manipDamage(-1)}
+              >
+                +
+              </Button>
+            ) : (
+              <Button
+                className={styles.leftButton}
+                onClick={() => this.manipDamage(-1)}
+              >
+                +
+              </Button>
+            )}
+
             <Input
               className={styles.centerInput}
               value={this.props.stats.health - this.props.damage}
             />
             <Button
               className={styles.rightButton}
-              onClick={() => this.props.manipDamage(1)}
+              onClick={() => this.manipDamage(1)}
             >
               -
             </Button>

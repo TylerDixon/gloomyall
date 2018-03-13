@@ -5,6 +5,9 @@ const monstersReducer = (state = [], action) => {
   switch (action.type) {
     case "ADD_MONSTERS":
       return state.concat(action.monsterIDs);
+    case "REMOVE_MONSTER":
+      let index = state.indexOf(action.monsterID);
+      return state.slice(0, index).concat(state.slice(index + 1));
     default:
       return state;
   }
@@ -22,12 +25,16 @@ const monsterInstances = (state = {}, action) => {
       .concat(monsterToEdit)
       .concat(monsters.slice(action.index + 1));
 
+  let newState = Object.assign({}, state);
   switch (action.type) {
     case "ADD_MONSTERS":
-      let newState = Object.assign({}, state);
       action.monsterIDs.forEach(
         id => (newState[id] = [{ damage: 0, statuses: [], number: 1 }])
       );
+      return newState;
+
+    case "REMOVE_MONSTER":
+      delete newState[action.monsterID];
       return newState;
 
     case "ADD_INSTANCE":

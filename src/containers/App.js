@@ -18,6 +18,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addMonsters: id => dispatch(actions.addMonsters(id)),
+    removeMonster: id => dispatch(actions.removeMonster(id)),
     removeInstance: (id, index) => dispatch(actions.removeInstance(id, index)),
     addInstance: (id, number, isElite) =>
       dispatch(actions.addInstance(id, number, isElite)),
