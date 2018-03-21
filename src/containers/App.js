@@ -5,13 +5,10 @@ import * as actions from "../actions";
 
 const mapStateToProps = state => {
   return {
-    monsters: state.monsters.present,
-    monsterInstances: state.monsterInstances.present,
-    hasHistory:
-      state.monsters.past.length > 0 || state.monsterInstances.past.length > 0,
-    hasFuture:
-      state.monsters.future.length > 0 ||
-      state.monsterInstances.future.length > 0
+    monsters: state.present.monsters,
+    monsterInstances: state.present.monsterInstances,
+    hasHistory: state.past.length > 0,
+    hasFuture: state.future.length > 0
   };
 };
 

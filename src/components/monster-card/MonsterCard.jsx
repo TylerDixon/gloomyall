@@ -90,7 +90,7 @@ class MonsterCard extends Component {
     );
     return (
       <Card title={title}>
-        <Row type="flex" gutter="25">
+        <Row type="flex" gutter={25}>
           <Col>
             <img
               alt={"Image for " + name}
@@ -109,6 +109,7 @@ class MonsterCard extends Component {
               {this.props.instances.map((monster, index) => {
                 return (
                   <MonsterHealth
+                    key={index}
                     stats={monster.isElite ? eliteStats : stats}
                     number={monster.number}
                     isElite={monster.isElite}

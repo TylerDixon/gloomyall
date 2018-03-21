@@ -107,7 +107,10 @@ const monsterInstances = (state = {}, action) => {
   }
 };
 
-export default combineReducers({
-  monsters: undoable(monstersReducer),
-  monsterInstances: undoable(monsterInstances)
-});
+export default undoable(
+  combineReducers({
+    monsters: monstersReducer,
+    monsterInstances: monsterInstances
+  }),
+  { ignoreInitialState: true }
+);

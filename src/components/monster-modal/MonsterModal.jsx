@@ -50,7 +50,13 @@ class MonsterModal extends Component {
       >
         {this.state.selectedMonsters.map((monster, index) => {
           return (
-            <Row className="mar-top-5" type="flex" justify="start" gutter={10}>
+            <Row
+              key={monster}
+              className="mar-top-5"
+              type="flex"
+              justify="start"
+              gutter={10}
+            >
               <Col>
                 <Select
                   value={monster}
@@ -58,7 +64,18 @@ class MonsterModal extends Component {
                   style={{ width: 300 }}
                 >
                   {Object.keys(stats.monsters).map(key => {
-                    return <Option value={key}>{key}</Option>;
+                    return (
+                      <Option
+                        key={key}
+                        value={key}
+                        disabled={
+                          this.props.currentMonsters.indexOf(key) > -1 ||
+                          this.state.selectedMonsters.indexOf(key) > -1
+                        }
+                      >
+                        {key}
+                      </Option>
+                    );
                   })}
                 </Select>
               </Col>

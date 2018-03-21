@@ -80,7 +80,7 @@ class App extends Component {
         {this.props.monsters.map((monster, index) => {
           const monsterInfo = stats.monsters[monster];
           return (
-            <Row>
+            <Row key={monster}>
               <MonsterCard
                 name={monster}
                 stats={monsterInfo.level[this.state.level].normal}
@@ -103,6 +103,7 @@ class App extends Component {
             destroyOnClose={true}
             visible={this.state.modalVisible}
             closeModal={this.closeModal}
+            currentMonsters={this.props.monsters}
             selectMonsters={monsters => {
               this.selectMonsters(monsters);
               this.closeModal();

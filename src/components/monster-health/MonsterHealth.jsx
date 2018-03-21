@@ -130,6 +130,7 @@ class MonsterHealth extends Component {
             <Input
               className={styles.centerInput}
               value={this.props.stats.health - this.props.damage}
+              readOnly
             />
             <Button
               className={styles.rightButton}
@@ -141,7 +142,7 @@ class MonsterHealth extends Component {
         </Col>
         {Object.keys(imageStatusMap).map(status => {
           return (
-            <Col>
+            <Col key={status}>
               <img
                 alt={"Icon for status " + status}
                 className={styles.statusImage + " " + this.desaturate(status)}
